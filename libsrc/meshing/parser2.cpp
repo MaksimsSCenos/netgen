@@ -19,12 +19,17 @@ void LoadMatrixLine (istream & ist, DenseMatrix & m, int line)
   float f;
 
   ist >> ch;
+  PrintMessage (3, "netrule :: LoadMatrixLine, testline 1 ", ch);
+
   while (ch != '}')
     {
+
       ist.putback (ch);
       ist >> f;
       ist >> ch;
       ist >> pnum;
+  PrintMessage (3, "netrule :: LoadMatrixLine, testline 2 ", ch);
+  PrintMessage (3, "netrule :: LoadMatrixLine, testline 3 ", std::to_string(f));
 
       if (ch == 'x' || ch == 'X')
 	m.Elem(line, 2 * pnum - 1) = f;
@@ -40,6 +45,9 @@ void LoadMatrixLine (istream & ist, DenseMatrix & m, int line)
 
 void netrule :: LoadRule (istream & ist)
 {
+	
+  PrintMessage (3, "netrule :: LoadRule, testline 1 ");
+
   char buf[256];
   char ch;
   Point<2> p;
@@ -47,18 +55,22 @@ void netrule :: LoadRule (istream & ist)
   int i, j;
   DenseMatrix tempoldutonewu(20, 20), tempoldutofreearea(20, 20),
     tempoldutofreearealimit(20, 20);
+  PrintMessage (3, "netrule :: LoadRule, testline 2");
 
   tempoldutonewu = 0;
   tempoldutofreearea = 0;
   tempoldutofreearealimit = 0;
+  PrintMessage (3, "netrule :: LoadRule, testline 3");
 
   noldp = 0;
   noldl = 0;
+  PrintMessage (3, "netrule :: LoadRule, testline 4");
 
   ist.get (buf, sizeof(buf), '"');
   ist.get (ch);
   ist.get (buf, sizeof(buf), '"');
   ist.get (ch);
+  PrintMessage (3, "netrule :: LoadRule, testline 5");
 
   // if(name != NULL) 
   delete [] name;
@@ -66,22 +78,27 @@ void netrule :: LoadRule (istream & ist)
   strcpy (name, buf);
   //(*testout) << "name " << name << endl;
   //  (*mycout) << "Rule " << name << " found." << endl;
+  PrintMessage (3, "netrule :: LoadRule, testline 6 ", name);
 
   do
     {
       ist >> buf;
+  PrintMessage (3, "netrule :: LoadRule, testline 5", buf);
 
       //(*testout) << "buf " << buf << endl;
 
       if (strcmp (buf, "quality") == 0)
 
 	{
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 quality");
+
 	  ist >> quality;
 	}
 
       else if (strcmp (buf, "mappoints") == 0)
 	{
 	  ist >> ch;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 mappoints");
 
 	  while (ch == '(')
 	    {
@@ -89,14 +106,17 @@ void netrule :: LoadRule (istream & ist)
 	      ist >> ch;    // ','
 	      ist >> p[1];
 	      ist >> ch;    // ')'
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 mappoints a");
 
 	      points.Append (p);
 	      noldp++;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 mappoints b");
 
 	      tolerances.SetSize (noldp);
 	      tolerances.Elem(noldp).f1 = 1.0;
 	      tolerances.Elem(noldp).f2 = 0;
 	      tolerances.Elem(noldp).f3 = 1.0;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 mappoints c");
 
 	      ist >> ch;
 	      while (ch != ';')
@@ -116,12 +136,14 @@ void netrule :: LoadRule (istream & ist)
 		      ist >> ch; // 'e'
 		      ist >> ch; // 'l'
 		    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 mappoints d");
 
 		  ist >> ch;
 		}
 
 	      ist >> ch;
 	    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 mappoints e");
 
 	  ist.putback (ch);
 	}
@@ -130,6 +152,7 @@ void netrule :: LoadRule (istream & ist)
       else if (strcmp (buf, "maplines") == 0)
 	{
 	  ist >> ch;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 maplines");
 
 	  while (ch == '(')
 	    {
@@ -138,6 +161,7 @@ void netrule :: LoadRule (istream & ist)
 	      ist >> lin.I2();
 	      ist >> ch;    // ')'
 
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 maplines a");
 
 	      //(*testout) << "read line " << lin.I1() << " " << lin.I2() << endl;
 	      lines.Append (lin);
@@ -147,6 +171,7 @@ void netrule :: LoadRule (istream & ist)
 	      linetolerances.Elem(noldl).f1 = 0;
 	      linetolerances.Elem(noldl).f2 = 0;
 	      linetolerances.Elem(noldl).f3 = 0;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 maplines b");
 
 	      //(*testout) << "mapl1" << endl; 
 	      ist >> ch;
@@ -169,6 +194,7 @@ void netrule :: LoadRule (istream & ist)
 		      ist >> ch; // 'l'
 		      //(*testout) << "read del" << endl;
 		    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 maplines c");
 
 		  ist >> ch;
 		  //(*testout) << "read character \""<<ch<<"\""<< endl;
@@ -178,6 +204,7 @@ void netrule :: LoadRule (istream & ist)
 	      //(*testout) << "read next character \""<<ch<<"\""<< endl;
 	    }
 	  
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 maplines d");
 
 	  ist.putback (ch);
 	}
@@ -185,7 +212,7 @@ void netrule :: LoadRule (istream & ist)
       else if (strcmp (buf, "newpoints") == 0)
 	{
 	  ist >> ch;
-
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newpoints");
 	  while (ch == '(')
 	    {
 	      ist >> p[0];
@@ -194,6 +221,7 @@ void netrule :: LoadRule (istream & ist)
 	      ist >> ch;    // ')'
 
 	      points.Append (p);
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newpoints a");
 
 	      ist >> ch;
 	      while (ch != ';')
@@ -202,17 +230,20 @@ void netrule :: LoadRule (istream & ist)
 		    {
 		      LoadMatrixLine (ist, tempoldutonewu,
 				      2 * (points.Size()-noldp) - 1);
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newpoints b");
 
 		      ist >> ch; // '{'
 		      LoadMatrixLine (ist, tempoldutonewu,
 				      2 * (points.Size()-noldp));
 		    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newpoints c");
 
 		  ist >> ch;
 		}
 
 	      ist >> ch;
 	    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newpoints d");
 
 	  ist.putback (ch);
 	}
@@ -220,6 +251,7 @@ void netrule :: LoadRule (istream & ist)
       else if (strcmp (buf, "newlines") == 0)
 	{
 	  ist >> ch;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newlines");
 
 	  while (ch == '(')
 	    {
@@ -227,6 +259,7 @@ void netrule :: LoadRule (istream & ist)
 	      ist >> ch;    // ','
 	      ist >> lin.I2();
 	      ist >> ch;    // ')'
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newlines a");
 
 	      lines.Append (lin);
 	      linevecs.Append (points.Get(lin.I2()) - points.Get(lin.I1()));
@@ -239,6 +272,7 @@ void netrule :: LoadRule (istream & ist)
 
 	      ist >> ch;
 	    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 newlines b");
 
 	  ist.putback (ch);
 	}
@@ -246,13 +280,14 @@ void netrule :: LoadRule (istream & ist)
       else if (strcmp (buf, "freearea") == 0)
 	{
 	  ist >> ch;
-
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea");
 	  while (ch == '(')
 	    {
 	      ist >> p[0];
 	      ist >> ch;    // ','
 	      ist >> p[1];
 	      ist >> ch;    // ')'
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea a");
 
 	      freezone.Append (p);
 	      freezonelimit.Append (p);
@@ -264,6 +299,7 @@ void netrule :: LoadRule (istream & ist)
 		    {
 		      LoadMatrixLine (ist, tempoldutofreearea,
 				      2 * freezone.Size() - 1);
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea b");
 
 		      ist >> ch; // '{'
 		      LoadMatrixLine (ist, tempoldutofreearea,
@@ -272,6 +308,7 @@ void netrule :: LoadRule (istream & ist)
 
 		  ist >> ch;
 		}
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea c");
 
 	      ist >> ch;
 	    }
@@ -281,6 +318,7 @@ void netrule :: LoadRule (istream & ist)
 	      tempoldutofreearealimit.Elem(i,j) =
 		tempoldutofreearea.Elem(i,j);
 
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea d");
 
 	  ist.putback (ch);
 	}    
@@ -289,7 +327,7 @@ void netrule :: LoadRule (istream & ist)
 	  ist >> ch;
 	  int freepi = 0;
 	  tempoldutofreearealimit = 0;
-
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea2");
 	  while (ch == '(')
 	    {
 	      freepi++;
@@ -298,6 +336,7 @@ void netrule :: LoadRule (istream & ist)
 	      ist >> ch;    // ','
 	      ist >> p[1];
 	      ist >> ch;    // ')'
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea a");
 
 	      freezonelimit.Elem(freepi) = p;
 	  
@@ -313,12 +352,14 @@ void netrule :: LoadRule (istream & ist)
 		      LoadMatrixLine (ist, tempoldutofreearealimit,
 				      2 * freepi);
 		    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea b");
 
 		  ist >> ch;
 		}
 	  
 	      ist >> ch;
 	    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 freearea c");
 
 	  ist.putback (ch);
 	}
@@ -326,6 +367,7 @@ void netrule :: LoadRule (istream & ist)
       else if (strcmp (buf, "elements") == 0)
 	{
 	  ist >> ch;
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 elements");
 
 	  while (ch == '(')
 	    {
@@ -333,7 +375,8 @@ void netrule :: LoadRule (istream & ist)
 
 	      ist >> elements.Last().PNum(1);
 	      ist >> ch;    // ','
-	  
+	  		  PrintMessage (3, "netrule :: LoadRule, testline 5 elements a");
+
 	      if (ch == COMMASIGN)
 		{
 		  ist >> elements.Last().PNum(2);
@@ -341,11 +384,15 @@ void netrule :: LoadRule (istream & ist)
 		}
 	      if (ch == COMMASIGN)
 		{
+					  PrintMessage (3, "netrule :: LoadRule, testline 5 elements b");
+
 		  ist >> elements.Last().PNum(3);
 		  ist >> ch;    // ','
 		}
 	      if (ch == COMMASIGN)
 		{
+					  PrintMessage (3, "netrule :: LoadRule, testline 5 elements c");
+
 		  elements.Last().SetType (QUAD);
 		  ist >> elements.Last().PNum(4);
 		  ist >> ch;    // ','
@@ -367,6 +414,7 @@ void netrule :: LoadRule (istream & ist)
 
 	      ist >> ch;
 	    }
+		  PrintMessage (3, "netrule :: LoadRule, testline 5 elements d");
 
 	  ist.putback (ch);
 	}
@@ -406,10 +454,12 @@ void netrule :: LoadRule (istream & ist)
 	}
     }
   while (!ist.eof() && strcmp (buf, "endrule") != 0);
+		  PrintMessage (3, "netrule :: LoadRule, testline 6");
 
   oldutonewu.SetSize (2 * (points.Size() - noldp), 2 * noldp);
   oldutofreearea.SetSize (2 * freezone.Size(), 2 * noldp);
   oldutofreearealimit.SetSize (2 * freezone.Size(), 2 * noldp);
+		  PrintMessage (3, "netrule :: LoadRule, testline 7");
 
   for (i = 1; i <= oldutonewu.Height(); i++)
     for (j = 1; j <= oldutonewu.Width(); j++)
@@ -418,6 +468,7 @@ void netrule :: LoadRule (istream & ist)
   for (i = 1; i <= oldutofreearea.Height(); i++)
     for (j = 1; j <= oldutofreearea.Width(); j++)
       oldutofreearea.Elem(i, j) = tempoldutofreearea.Elem(i, j);
+		  PrintMessage (3, "netrule :: LoadRule, testline 8");
 
   for (i = 1; i <= oldutofreearea.Height(); i++)
     for (j = 1; j <= oldutofreearea.Width(); j++)
@@ -425,6 +476,7 @@ void netrule :: LoadRule (istream & ist)
 
   freesetinequ.SetSize (freezone.Size());
 
+		  PrintMessage (3, "netrule :: LoadRule, testline 9");
 
   {
     char ok;
@@ -436,6 +488,7 @@ void netrule :: LoadRule (istream & ist)
 
     for (j = 1; j <= 2; j++)
       pnearness.Elem(GetPointNr (1, j)) = 0;
+		  PrintMessage (3, "netrule :: LoadRule, testline 10");
 
     do
       {
@@ -456,6 +509,7 @@ void netrule :: LoadRule (istream & ist)
 	  }
       }
     while (!ok);
+		  PrintMessage (3, "netrule :: LoadRule, testline 11");
 
     lnearness.SetSize (noldl);
 
@@ -466,13 +520,17 @@ void netrule :: LoadRule (istream & ist)
 	  lnearness.Elem(i) += pnearness.Get(GetPointNr (i, j));
       }
   }
+		  PrintMessage (3, "netrule :: LoadRule, testline 12");
 
   oldutofreearea_i.SetSize (10);
   freezone_i.SetSize (10);
+		  PrintMessage (3, "netrule :: LoadRule, testline 13");
 
   for (i = 0; i < oldutofreearea_i.Size(); i++)
     {
       double lam1 = 1.0/(i+1);
+		  PrintMessage (3, "netrule :: LoadRule, testline 13 a ");
+		  PrintMessage (3, std::to_string(oldutofreearea.Height()), std::to_string(oldutofreearea.Width()));
 
       oldutofreearea_i[i] = new DenseMatrix (oldutofreearea.Height(), oldutofreearea.Width());
       DenseMatrix & mati = *oldutofreearea_i[i];
@@ -485,6 +543,8 @@ void netrule :: LoadRule (istream & ist)
       for (int j = 0; j < freezone.Size(); j++)
 	fzi[j] = freezonelimit[j] + lam1 * (freezone[j] - freezonelimit[j]);
     }
+			  PrintMessage (3, "netrule :: LoadRule, testline 14");
+
 }
 
 
@@ -495,6 +555,8 @@ extern const char * quadrules[];
 
 void Meshing2 :: LoadRules (const char * filename, bool quad)
 {
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 1 ");
+  
   char buf[256];
   istream * ist;
   //char *tr1 = NULL;
@@ -533,16 +595,25 @@ void Meshing2 :: LoadRules (const char * filename, bool quad)
 	  // LoadRules ("rules/quad.rls");
 	}
 
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 1");
+
       size_t len = 0;
       while (*hcp)
 	{
 	  //	  (*testout) << "POS2 *hcp " << *hcp << endl;
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 2");
+
 	  len += strlen (*hcp);
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 3");
+
 	  hcp++;
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 4");
+
 	}
       //tr1 = new char[len+1];
       //tr1[0] = 0;
       tr1.reserve(len+1);
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 5");
 
 
       // if (!mparam.quad)
@@ -550,6 +621,7 @@ void Meshing2 :: LoadRules (const char * filename, bool quad)
 	hcp = triarules;
       else
 	hcp = quadrules;
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 56");
 
 
       //char * tt1 = tr1;
@@ -557,51 +629,86 @@ void Meshing2 :: LoadRules (const char * filename, bool quad)
 	{
 	  //strcat (tt1, *hcp);
 	  //tt1 += strlen (*hcp);
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 7");
+
 	  tr1.append(*hcp);
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 8");
+
 	  hcp++;
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 9");
+
 	}
       
 #ifdef WIN32
       // VC++ 2005 workaround
 	  for(string::size_type i=0; i<tr1.size(); i++)
 	if(tr1[i] == ',')
+	{
+			  PrintMessage (3, "Meshing2 :: LoadRules, testline 10");
+
 	  tr1[i] = ':';
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 11");
+
+	}
 #endif
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 12", tr1);
 
       ist = new istringstream (tr1);
     }
 
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 13");
 
   if (!ist->good())
     {
       cerr << "Rule description file " << filename << " not found" << endl;
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 14");
+
       delete ist;
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 15");
+
       exit (1);
     }
 
   Timer t("Parsing rules");
   t.Start();
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 16");
+
   while (!ist->eof())
     {
       buf[0] = 0;
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 17");
+
       (*ist) >> buf;
+	  PrintMessage (3, "Meshing2 :: LoadRules, testline 18");
+	  PrintMessage (3, buf);
 
       if (strcmp (buf, "rule") == 0)
 	{
 	  //(*testout) << "found rule" << endl;
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 19, found rule", buf);
+
 	  netrule * rule = new netrule;
 	  //(*testout) << "fr1" << endl;
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 20");
+	
 	  rule -> LoadRule(*ist);
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 21");
+
 	  //(*testout) << "fr2" << endl;
 	  
 	  rules.Append (rule);
+	  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 22");
+
 	}
       //(*testout) << "loop" << endl;
     }
   //(*testout) << "POS3" << endl;
   t.Stop();
-  
+  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 23");
+
   delete ist;
+  	  PrintMessage (3, "Meshing2 :: LoadRules, testline 24");
+
   //delete [] tr1;
 }
 
