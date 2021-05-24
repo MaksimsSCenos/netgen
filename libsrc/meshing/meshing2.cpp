@@ -44,35 +44,18 @@ namespace netgen
     : geo(ageo), adfront(aboundingbox), boundingbox(aboundingbox)
   {
     static Timer t("Mesing2::Meshing2"); RegionTimer r(t);
-	  PrintMessage (3, "Meshing2 :: Meshing2, testline 1");
 
     auto & globalrules = mp.quad ? global_quad_rules : global_trig_rules;
-		  PrintMessage (3, "Meshing2 :: Meshing2, testline 2");
-
     if (!globalrules.Size())
       {
-		  	  PrintMessage (3, "Meshing2 :: Meshing2, testline 3");
-
         LoadRules (NULL, mp.quad);
-			  PrintMessage (3, "Meshing2 :: Meshing2, testline 4");
-
         for (auto * rule : rules)
-		{
-				  PrintMessage (3, "Meshing2 :: Meshing2, testline 5");
-
           globalrules.Append (unique_ptr<netrule>(rule));
-		}
       }
     else
       {
-		  				  PrintMessage (3, "Meshing2 :: Meshing2, testline 6");
-
         for (auto i : globalrules.Range())
-		{
-							  PrintMessage (3, "Meshing2 :: Meshing2, testline 7");
-
           rules.Append (globalrules[i].get());
-		}
       }
     // LoadRules ("rules/quad.rls");
     // LoadRules ("rules/triangle.rls");
@@ -80,10 +63,7 @@ namespace netgen
 
     
     // adfront = new AdFront2(boundingbox);
-					  PrintMessage (3, "Meshing2 :: Meshing2, testline 8");
-
     starttime = GetTime();
-				  PrintMessage (3, "Meshing2 :: Meshing2, testline 9");
 
     maxarea = -1;
   }
